@@ -4,6 +4,7 @@ package com.practice.olegtojgildin.mvpractice_meet_17.viewmodel;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.os.AsyncTask;
+import android.util.Log;
 
 
 import com.practice.olegtojgildin.mvpractice_meet_17.BR;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class DataViewModel extends BaseObservable {
+    private static String TAG="DataViewModel";
     private DataAdapter adapter;
     private List<ImageModel> data;
 
@@ -39,21 +41,14 @@ public class DataViewModel extends BaseObservable {
     }
 
     public void setData() {
-        try {
             new AsyncTaskForecast(new Callback<List<ImageModel>>() {
                 @Override
                 public void callback(List<ImageModel> value) {
                     data.addAll(value);
                     notifyPropertyChanged(BR.data);
                 }
-            }).execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+            }).execute();
 
-        notifyPropertyChanged(BR.data);
     }
 
     public class AsyncTaskForecast extends AsyncTask<Void, Void, List<Hit>> {
